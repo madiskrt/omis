@@ -95,13 +95,6 @@ function getData(xml){
 <br><br>
 <button>Salvesta</button>
 
-<label>Mis toimub?</label>
-<ul>
-	<li>üks</li>
-	<li>kaks</li>
-	<li>kolm</li>
-</ul>
-
 <script>
 
 
@@ -147,32 +140,35 @@ var pos = -1;
 //JQuery
 $("input").on("keyup",function(e){
 	var id = firstLetter(this.id);
+	
 	autofill(id);
+	var x = $("li");
 	//console.log(e.keyCode);
 	if(e.keyCode == 40){
-		var x = $("li");
 		pos++;
-		
 		//$("li") - massiivi saame, sama mis get elements by tag name li
 		//get(0) võta esimene elemet
 		//$ - selektor, vali see element
 		console.log(pos);
-		if(pos == x.length - 1){
+		if(pos > x.length - 1){
 			$(x.get(pos)).removeClass("active");
 			pos = -1;
 		}
-		$(x.get(pos)).addClass("active");
+		else $(x.get(pos)).addClass("active");
 	}
 	if(e.keyCode == 38){
 		pos--;
 		if(pos == -1){
 			$(x.get(0)).removeClass("active");
-			pos = x.length - 1;
+			pos = x.length;
 		}
-		$($("li").get(pos)).addClass("active");
+		else $(x.get(pos)).addClass("active");
 	}
 	if(e.keyCode == 13){
-
+		$(this).val(x.get(pos).innerHTML);
+		$("ul").html("");
+		$("ul").hide(); //ul-id on vaja puhastada
+		pos = -1;
 	}
 
 });
@@ -183,13 +179,23 @@ $("input").on("focus",function(){
 
 $("input").on("blur", function(){
 	$("#" + firstLetter(this.id)).hide();
+	pos = -1;
 }); //blur
 
 $("ul").on("mousedown", "li", function(event){ //click asemel mousedown
-			$("ul").hide();
+			
 			//console.log(this.innerHTML);
 			$("#" + $(this).parent().get(0).id.toLowerCase()).val(this.innerHTML);
+			$("ul").hide();
+			$("ul").html("");
 		}); //blur
+
+$("ul").on("mouseover","li", function(){
+	var x = $("li");
+	$(x.get(pos)).removeClass("active");
+	pos = $(this).index();
+	$(x.get(pos)).addClass("active");
+});
 
 /*$(document).keydown(function(e){
 	console.log(e.keyCode);
