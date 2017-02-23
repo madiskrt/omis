@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script>
+
+function getData(xml){
+	//see tegevus siin on asynkroonne, veebilehitseja jätkab lehekylje loomisega
+    var xmlDoc = xml.responseXML; //muutujas on xml-i sisu
+    var x = xmlDoc.getElementsByTagName("Purchase");
+    var shops = [];
+    var categories = [];
+
+    for (i = 0; i <x.length; i++) { 
+    //getElementsByTagName annab massiivi
+    
+    item = x[i].getElementsByTagName("Shop")[0].childNodes[0].nodeValue;
+    if(shops.indexOf(item) == -1) shops.push(item);
+    shops.sort();
+
+    item = x[i].getElementsByTagName("Category")[0].childNodes[0].nodeValue;
+    if(categories.indexOf(item) == -1) categories.push(item);
+    categories.sort();
+
+  	}
+
+    console.log(shops);
+    console.log(categories);
+    //myFunction(this);
+}
+
+	
+//function loadDoc() { kuna tahame et käivituks kohe
+//tahame selle panna leheklje algusesse
+  var xhttp = new XMLHttpRequest(); 
+
+  //mis juhtub kui muutub HttpReguest päringu staatus
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+    	getData(this);
+    }
+
+  };
+
+  //päringu teeme siin, avame yhenduse, saadame 
+  xhttp.open("GET", "http://localhost/omis2/purchases.xml", true);
+  xhttp.send();
+
+</script>
+
+<h1>Ostude sisestamine</h1>
+
+<label>Pood</label><br>
+<input type="text" name=""><br><br>
+
+<label>Kategooria</label><br>
+<input type="text" name=""><br><br>
+
+<label>Alamkategooria</label><br>
+<input type="text" name=""><br><br>
+
+<label>Kaup</label><br>
+<input type="text" name=""><br><br><br>
+
+<button>Salvesta</button>
+
+<script>
+	
+
+
+</script>
+
+</body>
+</html>

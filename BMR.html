@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>JavaScript</title>
+<style>
+
+* {
+	font-family: Calibri;
+	color: darkgreen;
+}
+
+body {
+	background: #FFFFCC;
+}
+#language {
+	float: right;
+	margin: 7px 0px;
+}
+h1 {
+	margin: 0px 0px 20px;
+}
+div {
+	width: 400px;
+	background: #FFFFFF;
+	padding: 30px;
+	border: 1px solid darkgreen;
+	margin: auto;
+}
+label {
+	width: 70px;
+	display: inline-block;
+}
+select {
+	border: 1px solid darkgreen;
+	padding: 3px 5px;
+	margin: 0px 20px 10px 0px;
+}
+button {
+	background: darkgreen;
+	color: #FFFFFF;
+	cursor: pointer;
+	border: none;
+	padding: 5px 20px;
+	transition: all 0.5s;
+	margin: 10px 73px 0px;
+}
+button:hover {
+	background: #339900;
+}
+</style>
+<script>
+
+var selected = ' selected="selected"';
+var s = '';
+
+</script>
+</head>
+<body>
+
+<div>
+
+<select onchange="change()" id="language">
+	<option value="et">Eesti</option>
+    <option value="en">English</option>
+    <option value="ru">Русский</option>
+</select>
+
+<h1 id="title">BMR kalkulaator</h1>
+
+<label id="height">Kasv</label>
+<select>
+	<script>
+		for (var i=220; i > 50; i--) {
+			if (i == 170) s = selected;
+			else s = '';
+			document.write('<option' + s + '>' + i + '</option>');
+		}
+	</script>
+</select>
+
+<label id="weight">Kaal</label>
+<select>
+	<script>
+		for (var i=150; i > 10; i--) {
+			if (i == 75) s = selected;
+			else s = '';
+			document.write('<option' + s + '>' + i + '</option>');
+		}
+	</script>
+</select>
+
+<br>
+
+<label id="age">Vanus</label>
+<select>
+	<script>
+		for (var i=100; i > 1; i--) {
+			if (i == 50) s = selected;
+			else s = '';
+			document.write('<option' + s + '>' + i + '</option>');
+		}
+	</script>
+</select>
+
+<label id="gender">Sugu</label>
+<select>
+	<option id="male">Mees</option>
+    <option id="female">Naine</option>
+</select>
+
+<br>
+
+<label id="workout">Koormus</label>
+<select>	
+    <option id="t1" value="1.2">Väike või puudub</option>
+    <option id="t2" value="1.375">Kerge (1-3 korda nädalas)</option>
+    <option id="t3" value="1.55">Keskmine (3-5 korda nädalas)</option>
+    <option id="t4" value="1.725">Raske (6-7 korda nädalas)</option>
+    <option id="t5" value="1.9">Väga raske (kaks korda päevas)</option>	
+</select>
+
+<br>
+
+<button id="calculate">Arvuta</button>
+
+</div>
+
+<script>
+
+var texts = {};
+
+texts.et = {
+	title: "BMR kalkulaator",
+	height: "Kasv",
+	weight: "Kaal",
+	age: "Vanus",
+	gender: "Sugu",
+	workout: "Koormus",
+	male: "Mees",
+	female: "Naine",
+	calculate: "Arvuta",
+	t1: "Väike või puudub",
+	t2: "Kerge (1-3 korda nädalas)",
+	t3: "Keskmine (3-5 korda nädalas)",
+	t4: "Raske (6-7 korda nädalas)",
+	t5: "Väga raske (kaks korda päevas)"
+};
+texts.en = {
+	title: "BMR calculator",
+	height: "Height",
+	weight: "Weight",
+	age: "Age",
+	gender: "Gender",
+	workout: "Workout",
+	male: "Male",
+	female: "Female",
+	calculate: "Calculate",
+	t1: "Little to no exercise",
+	t2: "Light exercise (1–3 days per week)",
+	t3: "Moderate exercise (3–5 days per week)",
+	t4: "Heavy exercise (6–7 days per week)",
+	t5: "Very heavy exercise (twice per day)"
+};
+texts.ru = {
+	title: "Калькулятор БМР",
+	height: "Рост",
+	weight: "Вес",
+	age: "Возраст",
+	gender: "Пол",
+	workout: "Нагрузка",
+	male: "Мужской",
+	female: "Женский",
+	calculate: "Вычислить",
+	t1: "Маленькая или отсутствует",
+	t2: "Лёгкая (1-3 раза в неделю)",
+	t3: "Средняя (3-5 раза в неделю)",
+	t4: "Тяжёлая (6-7 раз в неделю)",
+	t5: "Очень тяжёлая (два раза в день)"
+};
+
+var elements = ["title","height","weight","age","gender","workout","calculate","female","male","t1","t2","t3","t4","t5"];
+
+function change() {
+	var l = document.getElementById("language").value;
+	
+	for (var n = 0; n < elements.length; n++) 
+		document.getElementById(elements[n]).innerHTML = texts[l][elements[n]];
+
+}
+
+</script>
+</body>
+</html>

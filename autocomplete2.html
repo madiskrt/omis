@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		ul {list-style-type: none; padding:0px; margin:0px; border:1px solid black;  width: 150px; display: none; position:absolute; background: white; z-index: 1;}
+		ul li {margin:0px; padding: 3px 10px;} 
+		ul li:hover {background: yellow;}
+
+	</style>
+
+
+</head>
+<body>
+<script>
+
+var data = {};
+var titles = ["Shop", "Category", "Subcategory", "Name"];
+
+function getData(xml){
+	//see tegevus siin on asynkroonne, veebilehitseja jätkab lehekylje loomisega
+    var xmlDoc = xml.responseXML; //muutujas on xml-i sisu
+    var x = xmlDoc.getElementsByTagName("Purchase");
+    var item;
+
+    for (var j = 0; j < titles.length; j++){
+ 	//loon objekti massiividega
+	data[titles[j]] = [];
+
+		for (var i = 0; i < x.length; i++) { 
+
+			item = x[i].getElementsByTagName(titles[j])[0].childNodes[0].nodeValue;
+		    if(data[titles[j]].indexOf(item) == -1) data[titles[j]].push(item);
+			}
+
+    data[titles[j]].sort();
+    console.log(data[titles[j]]);
+
+    
+    //getElementsByTagName annab massiivi
+
+  	}
+    
+    //myFunction(this);
+}
+
+	
+//function loadDoc() { kuna tahame et käivituks kohe
+//tahame selle panna leheklje algusesse
+  var xhttp = new XMLHttpRequest(); 
+
+  //mis juhtub kui muutub HttpReguest päringu staatus
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+    	getData(this);
+    }
+
+  };
+
+  //päringu teeme siin, avame yhenduse, saadame 
+  xhttp.open("GET", "http://localhost/omis2/purchases.xml", true);
+  xhttp.send();
+
+
+
+</script>
+
+<h1>Ostude sisestamine</h1>
+
+<label>Pood</label><br>
+<input id="shop" onKeyUp="autofill('Shop')" type="text" name="">
+
+<ul id="Shop"></ul>
+
+<br>
+<label>Kategooria</label><br>
+<input id="category" onKeyUp="autofill('Category')" type="text" name="">
+
+<ul id="Category"></ul>
+
+<br>
+<label>Alamkategooria</label><br>
+<input type="text" name=""><br><br>
+
+<label>Kaup</label><br>
+<input type="text" name=""><br><br><br>
+
+<button>Salvesta</button>
+
+<script>
+	
+function autofill(x) {
+	var input = document.getElementById(x.toLowerCase());
+	var output = "";
+	var exist = false;
+	//näitame aint neid mis vastavad tähele;
+	var s = input.value;
+	for(var i = 0; i < data[x].length; i++){
+		if(data[x][i].toLowerCase().indexOf(s.toLowerCase()) == 0){
+		output += "<li>" + data[x][i] + "</li>";
+		exist = true;
+		}
+	}
+
+	if(exist){
+		document.getElementById(x).innerHTML = output;
+		document.getElementById(x).style.display = "block";
+	}
+
+	if(s.length == 0){
+		document.getElementById(x).style.display = "none";
+	}
+
+	
+}
+
+</script>
+
+</body>
+</html>

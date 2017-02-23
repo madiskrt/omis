@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		ul {list-style-type: none; padding:0px; margin:0px; border:1px solid black;  width: 150px; display: none; position:absolute; background: white; z-index: 1;}
+		ul li {margin:0px; padding: 3px 10px;} 
+		ul li:hover, .active {background: yellow;}
+
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+</head>
+<body>
+<script>
+
+var data = {};
+var titles = ["Shop", "Category", "Subcategory", "Name"];
+
+function getData(xml){
+	//see tegevus siin on asynkroonne, veebilehitseja jätkab lehekylje loomisega
+    var xmlDoc = xml.responseXML; //muutujas on xml-i sisu
+    var x = xmlDoc.getElementsByTagName("Purchase");
+    var item;
+
+    for (var j = 0; j < titles.length; j++){
+ 	//loon objekti massiividega
+	data[titles[j]] = [];
+
+		for (var i = 0; i < x.length; i++) { 
+
+			item = x[i].getElementsByTagName(titles[j])[0].childNodes[0].nodeValue;
+		    if(data[titles[j]].indexOf(item) == -1) data[titles[j]].push(item);
+			}
+
+    data[titles[j]].sort();
+    console.log(data[titles[j]]);
+
+    
+    //getElementsByTagName annab massiivi
+
+  	}
+    
+    //myFunction(this);
+}
+
+	
+//function loadDoc() { kuna tahame et käivituks kohe
+//tahame selle panna leheklje algusesse
+  var xhttp = new XMLHttpRequest(); 
+
+  //mis juhtub kui muutub HttpReguest päringu staatus
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+    	getData(this);
+    }
+
+  };
+
+  //päringu teeme siin, avame yhenduse, saadame 
+  xhttp.open("GET", "http://localhost/omis2/purchases.xml", true);
+  xhttp.send();
+
+
+
+</script>
+
+<h1>Ostude sisestamine</h1>
+
+
+
+<label>Pood</label><br>
+<input id="shop" type="text" name="">
+
+<ul id="Shop"></ul>
+
+<br><br>
+<label>Kategooria</label><br>
+<input id="category" type="text" name="">
+
+<ul id="Category"></ul>
+
+<br><br>
+<label>Alamkategooria</label><br>
+<input id="subcategory" type="text" name="">
+
+<ul id="Subcategory"></ul>
+
+<br><br>
+<label>Kaup</label><br>
+<input id="name" type="text" name="">
+
+<ul id="Name"></ul>
+
+<br><br>
+<button>Salvesta</button>
+
+<label>Mis toimub?</label>
+<ul>
+	<li>üks</li>
+	<li>kaks</li>
+	<li>kolm</li>
+</ul>
+
+<script>
+
+
+
+function autofill(x) {
+	var input = document.getElementById(x.toLowerCase());
+	var output = "";
+	var exist = false;
+	//näitame aint neid mis vastavad tähele;
+	//$("#" + x).hide();
+	var s = input.value;
+
+	for(var i = 0; i < data[x].length; i++){
+
+		if(data[x][i].toLowerCase().indexOf(s.toLowerCase()) == 0){
+		output += '<li onclick="pick(' + x.toLowerCase() + ',this)">' + data[x][i] + "</li>";
+		exist = true;
+		}
+	}
+
+	if(exist){
+		document.getElementById(x).innerHTML = output;
+		//JQuery: $("#" + id).html(output);
+		document.getElementById(x).style.display = "block";
+		//JQuery: $("#" + id).show();
+	}
+}
+
+function empty(x){
+	document.getElementById(x).style.display = "none";
+}
+
+function firstLetter(string){
+	return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function pick(id,x){
+	console.log(id.id);
+}
+
+var pos = -1;
+
+//JQuery
+$("input").on("keyup",function(e){
+	var id = firstLetter(this.id);
+	autofill(id);
+	//console.log(e.keyCode);
+	if(e.keyCode == 40){
+		var x = $("li");
+		pos++;
+		
+		//$("li") - massiivi saame, sama mis get elements by tag name li
+		//get(0) võta esimene elemet
+		//$ - selektor, vali see element
+		console.log(pos);
+		if(pos == x.length - 1){
+			$(x.get(pos)).removeClass("active");
+			pos = -1;
+		}
+		$(x.get(pos)).addClass("active");
+	}
+	if(e.keyCode == 38){
+		pos--;
+		if(pos == -1){
+			$(x.get(0)).removeClass("active");
+			pos = x.length - 1;
+		}
+		$($("li").get(pos)).addClass("active");
+	}
+	if(e.keyCode == 13){
+
+	}
+
+});
+
+$("input").on("focus",function(){
+	autofill(firstLetter(this.id));
+});
+
+$("input").on("blur", function(){
+	$("#" + firstLetter(this.id)).hide();
+}); //blur
+
+$("ul").on("mousedown", "li", function(event){ //click asemel mousedown
+			$("ul").hide();
+			//console.log(this.innerHTML);
+			$("#" + $(this).parent().get(0).id.toLowerCase()).val(this.innerHTML);
+		}); //blur
+
+/*$(document).keydown(function(e){
+	console.log(e.keyCode);
+});*/
+
+</script>
+
+</body>
+</html>
