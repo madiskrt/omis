@@ -32,7 +32,12 @@ function filterData(id,val) {
 			item = purchases[i][titles[j]];
 			condition = data[titles[j]].indexOf(item) == -1;
 			if (id == "category" && titles[j] == "Subcategory") condition = condition && purchases[i]["Category"] == val;
+
 			if (id == "subcategory" && titles[j] == "Name") condition = condition && purchases[i]["Subcategory"] == val;
+
+			if (id == "subcategory" && titles[j] == "Subcategory")
+				condition = condition && purchases[i]["Category"] == $("#category").val();
+
 		    if(condition) data[titles[j]].push(item);
 			}
 
@@ -81,7 +86,7 @@ function getData(xml){
   };
 
   //päringu teeme siin, avame yhenduse, saadame 
-  xhttp.open("GET", "http://localhost/omis2/purchases.xml", true);
+  xhttp.open("GET", "http://localhost/omis/purchases.xml", true);
   xhttp.send();
 
 
@@ -125,7 +130,7 @@ function getData(xml){
 <ul id="Shop"></ul>
 
 <br><br>
-<input type="submit" name="">
+
 </form>
 <button>Salvesta</button>
 
@@ -245,9 +250,9 @@ $.event.special.inputchange = {
 
 $("#category, #subcategory").on("inputchange", function(){
 	var val = $(this).val();
-	if(val != "") filterData(this.id, val);
-	else filterData(); //siis annab täisnimekirja
-
+	//if(val != "") filterData(this.id, val);
+	//else filterData(); //siis annab täisnimekirja
+	filterData(this.id,val)
 	//console.log(this.id);
 });
 
