@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<meta charset="utf-8">
+<title>calendar</title>
+<style>
+
+	span { 
+		padding: 20px 10px; border: Silver 1px solid; display: inline-block; width: 150px; text-align: center; width: 13%; overflow: hidden; text-overflow: ellipsis; word-wrap: break-word; margin: 2px; height: 100px;
+	}
+	main { 
+		width: 89%; margin: 100px auto; display: block; text-align: center;
+	}
+	button {
+		margin: 10px;
+	}
+	.day {width: 100%; height: 500px; background-color: azure;}
+	.week {width: 11%; height: 400px; background-color: yellow;}
+	.month {width: 11%; height: 100px; background-color: cyan;}
+	.today {background-color: red;}
+	</style>
+	
+	<script>
+	
+	//defineerime rakenduse, objekti
+	var app = angular.module("myApp", []);
+	
+	//
+	app.controller("myCtrl", function($scope){
+		
+		$scope.init = function(p){
+			$scope.period = p;
+			$scope.cal = [];
+			d = $scope.shifted;
+			if(p==35) d = new Date(d.setDate(1));
+			
+			if(p != 1 && d.getDay() != 0){
+				do{
+					d = new Date(d.setDate(d.getDate()-1));
+
+				}
+				while(d.getDay() != 1);
+			}
+				d = new Date(d.setDate(d.getDate() - 1));
+				for (var i=0; i < p; i++){
+					$scope.cal[i] = new Date(d.setDate(d.getDate() + 1));
+			}
+		}
+
+		//today
+		$scope.isToday = function(x){
+			//ja väljastab klassi
+			//kontrollin kas
+			var d = new Date();
+			var day = new Date(x);
+			if(day.getDate() == d.getDate() && day.getMonth() == d.getMonth()) 
+			return 'today';
+		}
+
+		$scope.shift = function(x){
+			var d = $scope.shifted;
+			var p = $scope.period;
+			$scope.shifted = new Date(d.setDate(d.getDate() + x * p)); //ei tööta 1 päevase jaoks
+			$scope.init(p);
+		}
+
+		//päev kuhu oleme nihkunud
+		$scope.shifted = new Date();
+		$scope.init(7);
+		
+	});
+	
+</script>
+	
+</head>
+
+<body>
+
+<main ng-app="myApp" ng-controller="myCtrl">
+<button ng-click="shift(-1)">&lt;</button>
+<button ng-click="init(1)">Day</button>
+<button ng-click="init(7)">Week</button>
+<button ng-click="init(35)">Month</button>
+<button ng-click="shift(+1)">&gt;</button>
+<br>
+<span ng-class="{today: isToday({{x}}), day: period==1, week: period==7, month: period==35}" ng-repeat="x in cal">{{x}}<br>{{x.getDate() + '.' + (1 + x.getMonth())}}</span>
+</main>
+
+
+	
+</body>
+</html>

@@ -38,8 +38,8 @@
 	
 	//
 	app.controller("myCtrl", function($scope,init){
-		
-		$scope.cal = init.create(10);
+		$scope.period = 35;
+		$scope.cal = init.create($scope.period);
 	});
 	
 </script>

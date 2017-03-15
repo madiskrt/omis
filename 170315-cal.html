@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<meta charset="utf-8">
+<title>calendar</title>
+<style>
+
+	span { 
+		padding: 20px 10px; border: Silver 1px solid; display: inline-block; width: 150px; text-align: center; width: 13%; overflow: hidden; text-overflow: ellipsis; word-wrap: break-word; margin: 2px; height: 100px;
+	}
+	main { 
+		width: 89%; margin: 100px auto; display: block; text-align: center;
+	}
+	button {
+		margin: 10px;
+	}
+	.day {width: 100%; height: 500px; background-color: azure;}
+	.week {width: 13%; height: 400px; background-color: yellow;}
+	.month {width: 13%; height: 100px; background-color: cyan;}
+	</style>
+	
+	<script>
+	
+	//defineerime rakenduse, objekti
+	var app = angular.module("myApp", []);
+	
+	//
+	app.controller("myCtrl", function($scope){
+		
+		$scope.init = function(p){
+			$scope.period = p;
+			$scope.cal = [];
+			var x;
+			var d = new Date();
+			if(p==35){
+				var x = new Date(d.setDate(1));
+			} else {
+				x = d;
+			}
+			
+			if(x.getDay() != 0){
+				do{
+					x = new Date(x.setDate(x.getDate()-1));
+
+				}
+				while(x.getDay() != 0);
+			}
+				for (var i=0; i < p; i++){
+					$scope.cal[i] = new Date(x.setDate(x.getDate() + 1));
+			}
+		}
+		$scope.init(7);
+	});
+	
+</script>
+	
+</head>
+
+<body>
+
+<main ng-app="myApp" ng-controller="myCtrl">
+<button ng-click="init(1)">Day</button>
+<button ng-click="init(7)">Week</button>
+<button ng-click="init(35)">Month</button><br>
+<span ng-class="{day: period==1, week: period==7, month: period==35}" ng-repeat="x in cal">{{x}}<br>{{x.getDate() + '.' + (1 + x.getMonth())}}</span>
+</main>
+
+
+	
+</body>
+</html>
