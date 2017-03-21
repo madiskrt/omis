@@ -88,6 +88,12 @@
 			$scope.init(p);
 		}
 
+		$scope.events = [];
+		$scope.addEvent = function(){
+			$scope.events.push(1);
+			console.log($scope.events);
+		}
+
 		$scope.week = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 		//päev kuhu oleme nihkunud
 		$scope.shifted = new Date();
@@ -109,9 +115,9 @@
 <button ng-click="shift(+1)">&gt;</button>
 <br>
 <header ng-if="period != 1" ng-class="{header: true}" ng-repeat="w in week">{{w}}</header>
-<span ng-class="{today: isToday({{x}}), other: otherMonth({{x}}), day: period==1, week: period==7, month: period==42}" ng-repeat="x in cal" ng-click="addEvent({{x}})">
+<span ng-class="{today: isToday({{x}}), other: otherMonth({{x}}), day: period==1, week: period==7, month: period==42}" ng-repeat="x in cal" ng-click="addEvent()">
 {{x.getDate()}}
-<section ng-repeat="e in events"><div>{{e}}</div></section>
+<section ng-repeat="e in events track by $index"><div>{{e}}</div></section>
 </span>
 </main>
 
